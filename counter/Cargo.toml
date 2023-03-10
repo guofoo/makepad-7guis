@@ -1,5 +1,5 @@
 [package]
-name = "Makepad-7GUIs-Counter"
+name = "makepad_7_guis_counter"
 version = "0.1.0"
 edition = "2021"
 

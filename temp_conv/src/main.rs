@@ -1,108 +1,16 @@
 use makepad_draw_2d::*;
-use makepad_widgets;
+use makepad_widgets::text_input::TextInputFrameRefExt;
 use makepad_widgets::*;
-use text_input::{TextInputAction};
 
 live_design! {
     import makepad_widgets::label::Label;
     import makepad_widgets::text_input::TextInput;
 
-    App = {{App}} {
+      App = {{App}} {
         // The `ui` field on the struct `App` defines a frame widget. Frames are used as containers
         // for other widgets. Since the `ui` property on the DSL object `App` corresponds with the
         // `ui` field on the Rust struct `App`, the latter will be initialized from the DSL object
         // here below.
-        // label_text: {
-        //     color: #9
-        // }
-
-        // label_walk: {
-        //     margin: {left: 4.0, top: 3.0}
-        //     width: Fill,
-        //     height: Fill
-        // }
-
-        // label_align: {
-        //     y: 0.0
-        // }
-
-        // input_fahrenheit: {
-        //     cursor_margin_bottom: 3.0,
-        //     cursor_margin_top: 4.0,
-        //     select_pad_edges: 3.0
-        //     cursor_size: 2.0,
-        //     empty_message: "0",
-        //     numeric_only: true,
-        //     // bg: {
-        //     //     shape: None
-        //     //     color: #f00
-        //     //     radius: 2
-        //     // },
-        //     // layout: {
-        //     //     padding: 0,
-        //     //     align: {y: 0.}
-        //     // },
-        //     walk: {
-        //         margin: {top: 3, right: 5}
-        //     }
-        // }
-
-        // input_celsius = <TextInput> {
-        //     // walk: { width: 100, height: 50 }
-        //     cursor_margin_bottom: 3.0,
-        //     cursor_margin_top: 4.0,
-        //     select_pad_edges: 3.0
-        //     cursor_size: 4.0,
-        //     empty_message: "0",
-        //     numeric_only: true,
-        //     bg: {
-        //         shape: None
-        //         color: #0f0
-        //         radius: 2
-        //     },
-        //     layout: {
-        //         padding: 20,
-        //         align: {y: 0}
-        //     },
-        //     walk: {
-        //         margin: {top: 3, right: 5}
-        //     }
-        //     text: "XXXXXXXXXXXXXXXX"
-        //     label: "Blah"
-        //     draw_label: {
-        //         text_style:
-        //             {
-        //                 // font: {path: d "crate://makepad-widgets/resources/IBMPlexSans-SemiBold.ttf"},
-        //                 font_size: (20)
-        //             }
-        //     }
-        // }
-
-        // input_celsius2 = <TextInput> {
-        //     walk: {
-        //         margin: {top: 3, right: 5}
-        //     }
-        //     text: "Celsius"
-        //     label: "Blah"
-        // }
-
-        input_celsius = <TextInput> {
-            // walk: {width:100, height:30},
-            walk: {
-                width: 100,
-                height: 50
-            },
-            text: "Input Celsius"
-        }
-
-        input_fahrenheit = <TextInput> {
-            walk: {
-                width: 100,
-                height: 50
-            },
-            text: "Input Fahrenheit"
-        }
-
         ui: {
             // The `layout` property determines how child widgets are laid out within a frame. In
             // this case, child widgets flow downward, with 20 pixels of spacing in between them,
@@ -113,7 +21,7 @@ live_design! {
             // remainder of the frame after the previous children have been drawn.
             layout: {
                 flow: Right,
-                spacing: 50,
+                spacing: 20,
                 align: {
                     x: 0.5,
                     y: 0.5
@@ -122,11 +30,12 @@ live_design! {
             // The `walk` property determines how the frame widget itself is laid out. In this
             // case, the frame widget takes up the entire window.
             walk: {
-                width: 200,
-                height: 50
+                width: Fill,
+                height: Fill
             },
             bg: {
                 shape: Solid
+
                 // The `fn pixel(self) -> vec4` syntax is used to define a property named `pixel`,
                 // the value of which is a shader. We use our own custom DSL to define shaders. It's
                 // syntax is *mostly* compatible with GLSL, although there are some differences as
@@ -135,28 +44,14 @@ live_design! {
                     // Within a shader, the `self.geom_pos` syntax is used to access the `geom_pos`
                     // attribute of the shader. In this case, the `geom_pos` attribute is built in,
                     // and ranges from 0 to 1. over x and y of the rendered rectangle
-                    return mix(#4, #4, self.geom_pos.y);
+                    return mix(#7, #3, self.geom_pos.y);
                 }
             }
 
-            // The `name:` syntax is used to define fields, i.e. properties for which there are
-            // corresponding struct fields. In contrast, the `name =` syntax is used to define
-            // instance properties, i.e. properties for which there are no corresponding struct
-            // fields. Note that fields and instance properties use different namespaces, so you
-            // can have both a field and an instance property with the same name.
-            //
-            // Widgets can hook into the Makepad runtime with custom code and determine for
-            // themselves how they want to handle instance properties. In the case of frame widgets,
-            // they simply iterate over their instance properties, and use them to instantiate their
-            // child widgets.
-            // input_celsius = <TextInput> {
-            //     // walk: {width:100, height:30},
-            //     walk: {
-            //         width: 100,
-            //         height: 50
-            //     },
-            //     text: "Input Celsius"
-            // }
+           input_celsius = <TextInput> {
+                // walk: {width:100, height:30},
+                text: "Input Celsius"
+            }
 
             label_celsius = <Label> {
                 walk: { width: 60, height: 50 }
@@ -170,13 +65,9 @@ live_design! {
                 text: "Celsius = "
             }
 
-            // input_fahrenheit = <TextInput> {
-            //     walk: {
-            //         width: 100,
-            //         height: 50
-            //     },
-            //     text: "Input Fahrenheit"
-            // }
+            input_fahrenheit = <TextInput> {
+                text: "Input Fahrenheit"
+            }
 
             label_fahrenheit = <Label> {
                 walk: { width: 60, height: 50 }
@@ -211,27 +102,16 @@ main_app!(App);
 pub struct App {
     // A chromeless window for our application. Used to contain our frame widget.
     window: BareWindow,
-
+    // A frame widget. Used to contain our button and label.
     ui: FrameRef,
-
-    label_walk: Walk,
-    label_align: Align,
-    label_text: DrawText,
-    label: String,
-    label_celsius: Label,
-
-    input_celsius: TextInput,
-
-    input_fahrenheit: TextInput,
-
-    label_fahrenheit: Label,
 
     // The value for our counter.
     //
     // The #[rust] attribute here is used to indicate that this field should *not* be initialized
     // from a DSL object, even when a corresponding property exists.
-    // #[rust]
-    // counter: usize,
+    #[rust]
+    c_value: usize,
+    f_value: usize,
 }
 
 impl App {
@@ -239,7 +119,7 @@ impl App {
         makepad_widgets::live_design(cx);
     }
 
-    pub fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
+     pub fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
         if let Event::Draw(event) = event {
             // This is a draw event, so create a draw context and use that to draw our application.
             let mut draw_cx = Cx2d::new(cx, event);
@@ -249,57 +129,37 @@ impl App {
         // Forward the event to the window.
         self.window.handle_event(cx, event);
 
-        // for action in self.input_celsius.handle_event(cx, event) {
-        for action in self.input_celsius.handle_event(cx, event) {
-            match action {
-                TextInputAction::KeyFocus => {
-                    println!("C Focus In");
-                }
-                TextInputAction::KeyFocusLost => {
-                    // self.animate_state(cx, id!(focus.off));
-                    println!("C Focus Out");
-                    self.update_input_fahrenheit(cx);
-                }
-                TextInputAction::Return(value) => {
-                    println!("C Return {}", value);
-                    // if let Ok(v) = value.parse::<f64>() {
-                    //     self.set_internal(v.max(self.min).min(self.max));
-                    // }
-                    self.update_input_fahrenheit(cx);
-                    // dispatch_action(cx, a::TextSlide(self.to_external()));
-                }
-                TextInputAction::Escape => {
-                    println!("Escape");
-                    // self.update_input_fahrenheit(cx);
-                }
-                _ => ()
+        // Forward the event to the frame. In this case, handle_event returns a list of actions.
+        // Actions are similar to events, except that events are always forwarded downward to child
+        // widgets, while actions are always returned back upwards to parent widgets.
+        let actions = self.ui.handle_event(cx, event);
+
+        // if self.ui.get_text_input(id!(input_celsius)).clicked(&actions) {
+        //     println!("C Focus In");
+        //     // let x = self.ui.get_text_input(id!(input_celsius)).selected_text();
+        //     // println!("C Focus value {}", x);
+        // }
+        if let res = self.ui.get_text_input(id!(input_celsius)).changed(&actions) {
+            // println!("C Changed {}", res);
+            if ! res.is_empty() {
+                self.f_value =(res.parse::<usize>().unwrap()) * 9 / 5 + 32;
+                // println!("New F={}", self.f_value);
+
+                let inp_f = self.ui.get_text_input(id!(input_fahrenheit));
+                inp_f.set_text(&format!("{}", self.f_value));
+                inp_f.redraw(cx);
             }
         };
 
-        for action in self.input_fahrenheit.handle_event(cx, event) {
-            match action {
-                TextInputAction::KeyFocus => {
-                    // self.animate_state(cx, id!(focus.on));
-                    println!("F Focus In");
-                }
-                TextInputAction::KeyFocusLost => {
-                    // self.animate_state(cx, id!(focus.off));
-                    println!("F Focus Out");
-                    self.update_input_celsius(cx);
-                }
-                TextInputAction::Return(value) => {
-                    println!("F Return {}", value);
-                    // if let Ok(v) = value.parse::<f64>() {
-                    //     self.set_internal(v.max(self.min).min(self.max));
-                    // }
-                    self.update_input_celsius(cx);
-                    // dispatch_action(cx, a::TextSlide(self.to_external()));
-                }
-                TextInputAction::Escape => {
-                    println!("Escape");
-                    // self.update_input_celsius(cx);
-                }
-                _ => ()
+        if let res = self.ui.get_text_input(id!(input_fahrenheit)).changed(&actions) {
+            // println!("F Changed {}", res);
+            if ! res.is_empty() {
+                self.c_value =(res.parse::<usize>().unwrap()) * 9 / 5 + 32;
+                // println!("New C={}", self.c_value);
+
+                let inp_c = self.ui.get_text_input(id!(input_celsius));
+                inp_c.set_text(&format!("{}", self.c_value));
+                inp_c.redraw(cx);
             }
         };
     }
@@ -311,78 +171,10 @@ impl App {
             return;
         }
 
-        if let Some(dw) = cx.defer_walk(self.label_walk) {
-            //, (self.value*100.0) as usize);
-            self.input_celsius.draw_walk(cx, self.input_celsius.get_walk());
-            // self.input_fahrenheit.draw_walk(cx, self.input_fahrenheit.get_walk());
-            self.label_text.draw_walk(cx, dw.resolve(cx), self.label_align, &self.label);
-        }
         // Draw the frame to the window.
-        // self.input_celsius.draw_walk(cx, self.input_celsius.get_walk());
         let _ = self.ui.draw(cx);
-        self.input_fahrenheit.draw_walk(cx, self.input_fahrenheit.get_walk());
-
-        // let _lab_c = self.label_celsius.draw_widget(cx, self.label_celsius.get_walk());
-        // let _lab_f = self.label_fahrenheit.draw_widget(cx, self.label_fahrenheit.get_walk());
-        // let _lab_f1 = self.label_fahrenheit.draw_walk_widget(cx);
 
         // Indicate that we finished drawing to the window.
         self.window.end(cx);
     }
-
-    pub fn update_input_fahrenheit(&mut self, cx: &mut Cx) {
-        // let e = self.to_external();
-        // self.text_input.text = match self.precision{
-        //     0=>format!("{:.0}",e),
-        //     1=>format!("{:.1}",e),
-        //     2=>format!("{:.2}",e),
-        //     3=>format!("{:.3}",e),
-        //     4=>format!("{:.4}",e),
-        //     5=>format!("{:.5}",e),
-        //     6=>format!("{:.6}",e),
-        //     7=>format!("{:.7}",e),
-        //     _=>format!("{}",e)
-        // };
-        // self.text_input.select_all();
-        // self.text_input.redraw(cx)
-
-        let f_value = (self.input_celsius.text.parse::<i32>().unwrap() * 9 / 5 + 32).to_string();
-        println!("f_value={}", f_value);
-
-        // let label = self.ui.get_label(id!(label_fahrenheit));
-        // label.set_text(&format!("{}", f_value));
-        // label.redraw(cx);
-
-        self.input_fahrenheit.select_all();
-        self.input_fahrenheit.redraw(cx);
-        self.input_fahrenheit.replace_text(&f_value);
-
-    }
-
-
-    pub fn update_input_celsius(&mut self, cx: &mut Cx) {
-        // let e = self.to_external();
-        // self.text_input.text = match self.precision{
-        //     0=>format!("{:.0}",e),
-        //     1=>format!("{:.1}",e),
-        //     2=>format!("{:.2}",e),
-        //     3=>format!("{:.3}",e),
-        //     4=>format!("{:.4}",e),
-        //     5=>format!("{:.5}",e),
-        //     6=>format!("{:.6}",e),
-        //     7=>format!("{:.7}",e),
-        //     _=>format!("{}",e)
-        // };
-        // self.text_input.select_all();
-        // self.text_input.redraw(cx)
-
-        let c_value = (self.input_fahrenheit.text.parse::<i32>().unwrap()*5/9-32).to_string();
-        println!("c_value={}", c_value);
-
-        self.input_celsius.select_all();
-        self.input_celsius.redraw(cx);
-        self.input_celsius.replace_text(&c_value);
-    }
-
 }
-

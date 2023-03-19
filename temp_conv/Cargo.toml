@@ -1,10 +1,9 @@
 [package]
-name = "makepad-example-temp-conv"
-version = "0.2.0"
+name = "makepad_7_guis_temp_conv"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-makepad-widgets = { path = "../../widgets", version = "0.3.0" }
-
-[features]
-nightly = ["makepad-widgets/nightly"]
-
+makepad-widgets = "0.3.0"

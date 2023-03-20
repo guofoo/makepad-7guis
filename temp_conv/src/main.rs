@@ -7,18 +7,9 @@ live_design! {
     import makepad_widgets::text_input::TextInput;
 
       App = {{App}} {
-        // The `ui` field on the struct `App` defines a frame widget. Frames are used as containers
-        // for other widgets. Since the `ui` property on the DSL object `App` corresponds with the
-        // `ui` field on the Rust struct `App`, the latter will be initialized from the DSL object
-        // here below.
+
         ui: {
-            // The `layout` property determines how child widgets are laid out within a frame. In
-            // this case, child widgets flow downward, with 20 pixels of spacing in between them,
-            // and centered horizontally with respect to the entire frame.
-            //
-            // Because the child widgets flow downward, vertical alignment works somewhat
-            // differently. In this case, children are centered vertically with respect to the
-            // remainder of the frame after the previous children have been drawn.
+
             layout: {
                 flow: Right,
                 spacing: 20,
@@ -36,14 +27,7 @@ live_design! {
             bg: {
                 shape: Solid
 
-                // The `fn pixel(self) -> vec4` syntax is used to define a property named `pixel`,
-                // the value of which is a shader. We use our own custom DSL to define shaders. It's
-                // syntax is *mostly* compatible with GLSL, although there are some differences as
-                // well.
                 fn pixel(self) -> vec4 {
-                    // Within a shader, the `self.geom_pos` syntax is used to access the `geom_pos`
-                    // attribute of the shader. In this case, the `geom_pos` attribute is built in,
-                    // and ranges from 0 to 1. over x and y of the rendered rectangle
                     return mix(#7, #3, self.geom_pos.y);
                 }
             }
@@ -110,8 +94,8 @@ pub struct App {
     // The #[rust] attribute here is used to indicate that this field should *not* be initialized
     // from a DSL object, even when a corresponding property exists.
     #[rust]
-    c_value: usize,
-    f_value: usize,
+    c_value: String,
+    f_value: String,
 }
 
 impl App {
@@ -134,34 +118,34 @@ impl App {
         // widgets, while actions are always returned back upwards to parent widgets.
         let actions = self.ui.handle_event(cx, event);
 
-        // if self.ui.get_text_input(id!(input_celsius)).clicked(&actions) {
-        //     println!("C Focus In");
-        //     // let x = self.ui.get_text_input(id!(input_celsius)).selected_text();
-        //     // println!("C Focus value {}", x);
-        // }
-        if let res = self.ui.get_text_input(id!(input_celsius)).changed(&actions) {
-            // println!("C Changed {}", res);
-            if ! res.is_empty() {
-                self.f_value =(res.parse::<usize>().unwrap()) * 9 / 5 + 32;
-                // println!("New F={}", self.f_value);
-
+        let res = self.ui.get_text_input(id!(input_celsius)).changed(&actions);
+        match res.parse::<i32>() {
+            Ok(number) => {
+                self.f_value = (number * 9 / 5 + 32).to_string();
+                println!("F={}", self.f_value);
                 let inp_f = self.ui.get_text_input(id!(input_fahrenheit));
                 inp_f.set_text(&format!("{}", self.f_value));
                 inp_f.redraw(cx);
             }
-        };
+            Err(_) => {
+                // println!("Invalid input. Please enter an integer.");
+            }
+        }
 
-        if let res = self.ui.get_text_input(id!(input_fahrenheit)).changed(&actions) {
-            // println!("F Changed {}", res);
-            if ! res.is_empty() {
-                self.c_value =(res.parse::<usize>().unwrap()) * 9 / 5 + 32;
-                // println!("New C={}", self.c_value);
-
+        let res = self.ui.get_text_input(id!(input_fahrenheit)).changed(&actions);
+        match res.parse::<i32>() {
+            Ok(number) => {
+                self.c_value = ((number - 32) * 5/9).to_string();
+                println!("C={}",  self.c_value);
                 let inp_c = self.ui.get_text_input(id!(input_celsius));
                 inp_c.set_text(&format!("{}", self.c_value));
                 inp_c.redraw(cx);
             }
-        };
+            Err(_) => {
+                // println!("Invalid input. Please enter an integer.");
+            }
+        }
+
     }
 
     // This is the immediate mode draw flow, as called above in response to the Draw event

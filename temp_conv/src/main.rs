@@ -124,8 +124,8 @@ impl App {
                     // println!("C Focus Out");
                     self.update_input_fahrenheit(cx);
                 }
-                TextInputAction::Return(value) => {
-                    // println!("C Return {}", value);
+                TextInputAction::Return(_value) => {
+                    // println!("C Return {}", _value);
                     self.update_input_fahrenheit(cx);
                 }
                 TextInputAction::Escape => {
@@ -144,8 +144,8 @@ impl App {
                     // println!("F Focus Out");
                     self.update_input_celsius(cx);
                 }
-                TextInputAction::Return(value) => {
-                    // println!("F Return {}", value);
+                TextInputAction::Return(_value) => {
+                    // println!("F Return {}", _value);
                     self.update_input_celsius(cx);
                 }
                 TextInputAction::Escape => {
@@ -186,7 +186,7 @@ impl App {
         match self.input_celsius.text.parse::<i32>() {
             Ok(number) => {
                 let f_value = (number * 9 / 5 + 32).to_string();
-                println!("C={}", f_value);
+                println!("F={}", f_value);
                 self.input_fahrenheit.select_all();
                 self.input_fahrenheit.redraw(cx);
                 self.input_fahrenheit.replace_text(&f_value);
